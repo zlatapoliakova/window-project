@@ -5,7 +5,8 @@ const modals = (state) => {
               close = document.querySelector(closeSelector),
               windows = document.querySelectorAll('[data-modal]'),
               windowsClose = document.querySelectorAll('[data-end]'),
-              closeTrigger = document.querySelectorAll('[data-close]');
+              closeTrigger = document.querySelectorAll('[data-close]'),
+              scroll = calcScrollWidth();
 
         trigger.forEach(item => {
             item.addEventListener('click', (e) => {
@@ -24,6 +25,7 @@ const modals = (state) => {
                 });
                     
                 modal.style.display = 'block';
+                document.body.style.marginRight = `${scroll}px`;
                 document.body.style.overflow = 'hidden';
             });
         });
@@ -39,12 +41,13 @@ const modals = (state) => {
 
         close.addEventListener('click', () => {
             modal.style.display = 'none';
-
+            
             windows.forEach(item => {
                 item.style.display = 'none';
             });
-
+            
             document.body.style.overflow = '';
+            document.body.style.marginRight = '0px';
         });
 
         modal.addEventListener('click', (e) => {
@@ -54,8 +57,9 @@ const modals = (state) => {
                 windows.forEach(item => {
                     item.style.display = 'none';
                 });
-
+        
                 document.body.style.overflow = '';
+                document.body.style.marginRight = '0px';
             }
         });
     }
@@ -67,6 +71,21 @@ const modals = (state) => {
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
         }, time);
+    }
+
+    const calcScrollWidth = () => {
+        let div = document.createElement('div');
+
+        div.style.width = '50px';
+        div.style.height = '50px';
+        div.style.overflowY = 'scroll';
+        div.style.visibility = 'hidden';
+
+        document.body.appendChild(div);
+        let scrollWidth = div.offsetWidth - div.clientWidth;
+        div.remove();
+
+        return scrollWidth;
     }
 
     bindModal('.popup_engineer_btn' ,'.popup_engineer', '.popup_engineer .popup_close');
